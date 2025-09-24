@@ -1,19 +1,39 @@
-function WeatherBackground({ weather }) {
-  let bg = "from-blue-500 to-blue-800"; // default gradient
+import React from "react";
+import { normalizeWeather } from "../utils/normalizeWeather";
 
-  if (weather) {
-    const condition = weather.weather[0].main.toLowerCase();
-    if (condition.includes("cloud")) bg = "from-gray-500 to-gray-800";
-    if (condition.includes("rain")) bg = "from-blue-700 to-gray-900";
-    if (condition.includes("clear")) bg = "from-yellow-400 to-blue-500";
-    if (condition.includes("snow")) bg = "from-blue-200 to-blue-500";
+const WeatherBackground = ({ weather }) => {
+  if (!weather) return null;
+
+  const simplified = normalizeWeather(weather);
+
+  let videoSrc = "/videos/sunny.mp4";
+  switch (simplified) {
+    case "Cloudy":
+      videoSrc = "/videos/clouds.mp4";
+      break;
+    case "Rain":
+      videoSrc = "/videos/rain.mp4";
+      break;
+    case "Snow":
+      videoSrc = "/videos/snow.mp4";
+      break;
+    case "Storm":
+      videoSrc = "/videos/storm.mp4";
+      break;
+    case "Sunny":
+    default:
+      videoSrc = "/videos/sun.mp4";
   }
 
   return (
-    <div
-      className={`absolute inset-0 bg-gradient-to-br ${bg} transition-all duration-500`}
+    <video
+      className="fixed top-0 left-0 w-full h-full object-cover -z-50"
+      src={videoSrc}
+      autoPlay
+      loop
+      muted
     />
   );
-}
+};
 
 export default WeatherBackground;

@@ -1,17 +1,23 @@
-function WeatherCard({ weather }) {
+import React from "react";
+import { normalizeWeather } from "../utils/normalizeWeather";
+import { weatherIcons } from "../utils/weatherIcons";
+
+const WeatherCard = ({ weather }) => {
+  if (!weather) return null;
+
+  const simplified = normalizeWeather(weather);
+  const icon = weatherIcons[simplified] || "☀️"; // fallback
+
   return (
-    <div className="bg-white/20 backdrop-blur rounded-2xl p-6 text-center max-w-sm w-full">
-      <h2 className="text-2xl font-bold">{weather.name}</h2>
-      <p className="capitalize text-lg">{weather.weather[0].description}</p>
-      <p className="text-5xl font-extrabold mt-2">
+    <div className="bg-white/80 p-8 rounded-xl shadow-xl text-center text-black w-full max-w-lg flex flex-col items-center gap-4">
+      <div className="text-6xl">{icon}</div> {/* Big icon */}
+      <h2 className="text-3xl font-bold">{weather.name}</h2>
+      <p className="text-xl">{simplified}</p>
+      <p className="text-2xl font-semibold">
         {Math.round(weather.main.temp)}°C
       </p>
-      <div className="flex justify-between mt-4 text-sm">
-        <p>💧 Humidity: {weather.main.humidity}%</p>
-        <p>💨 Wind: {Math.round(weather.wind.speed)} m/s</p>
-      </div>
     </div>
   );
-}
+};
 
 export default WeatherCard;
